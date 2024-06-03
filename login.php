@@ -1,21 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
-<body>
-    <form action="/Controller_Login" method="get">
+<?php
+require_once "conexionDB.php";
+session_start();
 
-        <p>User:</p>
-        <input type="text">
+if (isset($_SESSION['user']) || isset($_COOKIE['user'])) {
+    header("Location: catalogo.php");
+    exit();
+}
 
-        <p>Password:</p>
-        <input type="password">
+// Obtener los datos del formulario
+$correo = $_POST['correo'];
+$password = $_POST['password'];
+$rememberme = isset($_POST['rememberme']);
 
-        <br><br>
-        <input type="submit" value="Enviar">
-    </form>
-</body>
-</html>
+// Consulta para verificar las credenciales
+$sql = "SELECT * FROM usuarios WHERE correo = ? AND password = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("ss", $correo, $password);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows > 0) {
+    // Las credenciales son correctas
+    if ($rememberme) {
+        // Crear una cookie que expire en 5 minutos
+        setcookie("user", $correo, time() + (5 * 60), "/");
+    } else {
+        // Iniciar una sesión normal
+        $_SESSION['user'] = $correo;
+    }
+    header("Location: catalogo.php");
+    exit();
+} else {
+    // Las credenciales son incorrectas, mostrar un mensaje de error
+    echo "Correo o contraseña incorrectos";
+}
+
+// Cerrar la conexión
+$stmt->close();
+$conn->close();
+?>
