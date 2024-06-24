@@ -1,0 +1,16 @@
+body {
+    background-image: ('avionfondo.gif');
+}
+.container {
+    margin-top: 100px;
+}
+.option-card {
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+.option-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}

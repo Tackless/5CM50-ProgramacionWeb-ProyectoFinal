@@ -3,7 +3,7 @@ require_once "conexionDB.php";
 session_start();
 
 if (isset($_SESSION['user']) || isset($_COOKIE['user'])) {
-    header("Location: catalogo.php");
+    header("Location: bienvenida.php");
     exit();
 }
 
@@ -28,7 +28,7 @@ if ($result->num_rows > 0) {
         // Iniciar una sesión normal
         $_SESSION['user'] = $correo;
     }
-    header("Location: catalogo.php");
+    header("Location: bienvenida.php");
     exit();
 } else {
     // Las credenciales son incorrectas, mostrar un mensaje de error
